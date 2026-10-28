@@ -1,206 +1,164 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Microbe War: Bio Defense</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Cellular Guard: Core Defense</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
-input{user-select:text;-webkit-user-select:text}
-html,body{margin:0;height:100%;background:#12232a;color:#e6f0ea;font-family:Tahoma,Arial,sans-serif;overflow:hidden}
-.scr{position:fixed;inset:0;background:linear-gradient(135deg,#17303a,#1f3f43);display:none;z-index:5;overflow:auto;padding:10px;text-align:center}
-.scr.on{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
-.scr.top.on{justify-content:flex-start}
-h1{margin:0}
-h2{margin:0;font-size:20px;color:#c4e6d6}
-.b{background:#3a6462;color:#e6f0ea;border:1px solid #79b1a2;border-radius:10px;padding:8px 16px;font-size:15px;margin:2px;font-family:inherit}
-.b:active{background:#4f8a82}
-.b:disabled{opacity:.4}
-.tx{background:#13222a;color:#e6f0ea;border:1px solid #79b1a2;border-radius:10px;padding:8px;font-size:15px;width:160px;text-align:center}
-#splash{background:#0d171b}
-#splash h1{font-size:36px;color:#e0463f;letter-spacing:3px;text-shadow:0 0 14px #e0463f55}
-#splash p{margin:0;color:#e0463f;letter-spacing:7px;font-size:15px}
-#menu.on{flex-direction:row;direction:ltr;justify-content:space-around}
-#mside{display:flex;flex-direction:column;gap:8px}
-.sq{width:80px;height:80px;border-radius:14px;background:#2f4f53;border:2px solid #6aa093;color:#e6f0ea;font-size:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:inherit}
-.sq i{font-size:26px;font-style:normal}
-.sq:active{background:#41706b}
-#mmid{line-height:1.8}
-.card{display:flex;align-items:center;gap:10px;background:#2c474d;border:1px solid #547f75;border-radius:12px;padding:8px 12px;margin:3px auto;font-size:13px;width:94%;max-width:560px;text-align:start}
-#pk{display:flex;gap:12px;direction:ltr}
-.cc{background:#2c474d;border:2px solid #6aa093;border-radius:14px;padding:8px;width:210px;color:#e6f0ea;font-family:inherit;font-size:12px;line-height:1.7}
-.cc:active{background:#41706b}
-#game{position:fixed;inset:0;display:none;flex-direction:row;direction:ltr;background:#12232a}
-#mn{flex:1;display:flex;flex-direction:column;min-width:0}
-#top{height:32px;display:flex;align-items:center;gap:9px;padding:0 8px;font-size:13px;background:#1b343b;white-space:nowrap;overflow:hidden}
-.bat{display:inline-block;width:36px;height:15px;border:2px solid #d3e6dc;border-radius:4px;position:relative;vertical-align:middle}
-.bat b{position:absolute;left:0;top:0;bottom:0;width:100%}
-.mini{background:#3a6462;color:#e6f0ea;border:1px solid #79b1a2;border-radius:6px;font-size:13px;padding:1px 8px}
-#cw{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
-#cv{touch-action:none}
-#side{width:86px;padding:4px;display:flex;flex-direction:column;gap:4px;background:#1b343b;justify-content:center}
-.tl{flex:1;max-height:84px;background:#2f4f53;border:2px solid #547f75;border-radius:12px;color:#e6f0ea;font-size:10px;font-family:inherit;line-height:1.4;padding:2px}
-.tl.sel{border-color:#b2ecd0;background:#437873}
-</style></head><body>
-
-<div class="scr on" id="splash"><canvas id="lg" width="120" height="80"></canvas><h1>MICROBE WAR</h1><p>BIO DEFENSE</p></div>
-
-<div class="scr" id="menu">
-<div id="mside">
-<button class="sq" onclick="show('pick')"><i>▶</i><span data-t="play"></span></button>
-<button class="sq" onclick="show('shop')"><i>🛒</i><span data-t="shop"></span></button>
-<button class="sq" onclick="show('set')"><i>⚙️</i><span data-t="settings"></span></button></div>
-<div id="mmid"><h2>MICROBE WAR</h2><div style="color:#9fcfba">BIO DEFENSE</div>
-<div style="margin-top:14px"><span data-t="level"></span> <b id="lv"></b></div>
-<div>🪙 <b id="mc"></b> <b id="pb"></b></div></div></div>
-
-<div class="scr top" id="shop"><h2><span data-t="shop"></span> 🪙 <span id="sc"></span></h2><div id="ups"></div>
-<button class="b" onclick="show('menu')" data-t="back"></button></div>
-
-<div class="scr top" id="set"><h2 data-t="settings"></h2>
-<div><span data-t="sound"></span> <input type="range" id="vol" min="0" max="1" step="0.1" style="width:140px" oninput="state.vol=+this.value;save();beep(500,.1)"></div>
-<div><span data-t="lang"></span> <button class="b" onclick="setLang('ar')">عربي</button><button class="b" onclick="setLang('en')">English</button></div>
-<div><button class="b" onclick="show('book')" data-t="book"></button></div>
-<h2 data-t="codes"></h2>
-<div><input class="tx" id="cd" data-ph="code"> <button class="b" onclick="promo()" data-t="apply"></button></div>
-<div id="pm"></div>
-<button class="b" onclick="show('menu')" data-t="back"></button></div>
-
-<div class="scr top" id="book"><h2 data-t="book"></h2><div id="bk" style="width:100%"></div>
-<button class="b" onclick="show('set')" data-t="back"></button></div>
-
-<div class="scr" id="pick"><h2 data-t="choose"></h2><div><span data-t="level"></span> <b id="pl"></b></div><div id="pk"></div>
-<button class="b" onclick="show('menu')" data-t="back"></button></div>
-
-<div class="scr" id="res"><h1 id="rt"></h1><div id="rg"></div>
-<div><button class="b" id="nx" onclick="show('pick')" data-t="next"></button><button class="b" id="rr" onclick="show('pick')" data-t="retry"></button><button class="b" onclick="show('menu')" data-t="menu"></button></div></div>
-
-<div id="game"><div id="mn">
-<div id="top"><span class="bat"><b id="bf"></b></span><b id="hw"></b><span>🛡️<b id="hs"></b></span><span>🪙<b id="hc"></b></span><span>⚡<b id="he"></b></span><span><span data-t="level"></span> <b id="hl"></b></span><span>🦠<b id="hn"></b></span>
-<button class="mini" onclick="G.paused=!G.paused">⏸</button><button class="mini" onclick="show('menu')">✖</button></div>
-<div id="cw"><canvas id="cv" width="900" height="420"></canvas></div></div>
-<div id="side">
-<button class="tl" id="tb0" onclick="sel(0)"></button><button class="tl" id="tb1" onclick="sel(1)"></button><button class="tl" id="tb2" onclick="sel(2)"></button><button class="tl" id="tb3" onclick="sel(3)"></button></div></div>
-
-<script>
-'use strict';
-const TXT={
-ar:{play:"العب",shop:"المتجر",settings:"الإعدادات",book:"📖 كتاب الميكروبات (Book History)",back:"رجوع",sound:"الصوت",lang:"اللغة",codes:"🎁 استبدال الأكواد",choose:"اختر خليتك",
-animal:"الخلية الحيوانية",plant:"الخلية النباتية",
-animalP:"⚡ طاقة أسرع<br>🔫 إطلاق أسرع 20%<br>🛡️ جدار عادي",
-plantP:"🛡️ جدار خلوي قوي ×2.5<br>🌿 الجدار يتجدد<br>⚡ طاقة عادية",
-level:"المستوى",up_wall:"الجدار الخلوي",up_cyto:"قوة السيتوبلازم",up_en:"إنتاج الطاقة",up_wpn:"الأسلحة والمضادات",
-code:"اكتب الكود",apply:"تفعيل",bad:"كود غير صحيح",used:"الكود مستخدم من قبل",pro:"تم فتح حساب PRO!",
-win:"انتصار!",lose:"النواة سقطت!",next:"التالي",retry:"إعادة",menu:"القائمة",weak:"نقطة الضعف",gain:"الكوينز المكتسبة",
-t0:"ميتوكوندريا",t1:"مضاد حيوي",t2:"مضاد فيروسات",t3:"مضاد فطريات",
-n0:"فيروس الإنفلونزا",d0:"كرة صغيرة بنتوءات، سريعة وضعيفة.",
-n1:"فيروس العاقمة",d1:"رأس سداسي وأرجل، سريع جداً.",
-n2:"بكتيريا كروية",d2:"خلايا مستديرة متجمعة، متوسطة القوة.",
-n3:"بكتيريا عصوية",d3:"جسم طويل وسوط، قوية وبطيئة.",
-n4:"الفطر",d4:"بطيء وصلب وصحته كبيرة."},
-en:{play:"Play",shop:"Shop",settings:"Settings",book:"📖 Book History",back:"Back",sound:"Sound",lang:"Language",codes:"🎁 Redeem Codes",choose:"Choose your cell",
-animal:"Animal Cell",plant:"Plant Cell",
-animalP:"⚡ Faster energy<br>🔫 20% faster fire<br>🛡️ Normal wall",
-plantP:"🛡️ Strong cell wall x2.5<br>🌿 Wall regenerates<br>⚡ Normal energy",
-level:"Level",up_wall:"Cell Wall",up_cyto:"Cytoplasm Power",up_en:"Energy Production",up_wpn:"Weapons & Antibiotics",
-code:"Enter code",apply:"Apply",bad:"Invalid code",used:"Code already used",pro:"PRO Account Unlocked!",
-win:"Victory!",lose:"The nucleus fell!",next:"Next",retry:"Retry",menu:"Menu",weak:"Weakness",gain:"Coins earned",
-t0:"Mitochondria",t1:"Antibiotic",t2:"Antiviral",t3:"Antifungal",
-n0:"Flu Virus",d0:"Small spiky ball, fast and weak.",
-n1:"Bacteriophage",d1:"Hexagon head with legs, very fast.",
-n2:"Coccus Bacteria",d2:"Round clustered cells, medium strength.",
-n3:"Bacillus Bacteria",d3:"Long body with a flagellum, strong and slow.",
-n4:"Fungus",d4:"Slow and tough with lots of health."}};
-const SAVE_KEY='mw3';
-const state={coins:0,lvl:1,cell:'animal',up:{wall:0,cyto:0,en:0,wpn:0},pro:false,used:[],vol:.5,lang:'ar'};
-const ENEMIES=[
-{hp:30,sp:40,dmg:5,col:'#ee8fa8',weak:2,unlock:1},
-{hp:45,sp:55,dmg:6,col:'#b8a0e6',weak:2,unlock:4},
-{hp:70,sp:28,dmg:8,col:'#e8b866',weak:1,unlock:2},
-{hp:100,sp:24,dmg:11,col:'#ec9a68',weak:1,unlock:8},
-{hp:160,sp:14,dmg:15,col:'#74bddc',weak:3,unlock:14}];
-const TOOLS=[
-{cost:50,col:'#f0c36a',ic:'⚡',dmg:0},
-{cost:75,col:'#8fd19e',ic:'💊',dmg:10},
-{cost:100,col:'#7fd0e0',ic:'💉',dmg:10},
-{cost:125,col:'#e6d37a',ic:'🧪',dmg:14}];const $=id=>document.getElementById(id);
-const t=k=>TXT[state.lang][k]||k;
-try{Object.assign(state,JSON.parse(localStorage.getItem(SAVE_KEY)||'{}'))}catch(e){}
-function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch(e){}}
-let audioCtx;
-function beep(f,d){
- if(!state.vol)return;
- try{audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();
- const o=audioCtx.createOscillator(),g=audioCtx.createGain();
- o.frequency.value=f;g.gain.value=state.vol*.12;
- o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d)}catch(e){}
-}
-
-const W=900,H=420,CX=450,CY=210,TAU=Math.PI*2;
-
-function rr(c,x,y,w,h,r){
- c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);
- c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();
-}
-function edgeVal(pl,dx,dy){return pl?Math.max(Math.abs(dx)/185,Math.abs(dy)/165):Math.hypot(dx/195,dy/170)}
-
-function drawEnemy(c,i,x,y,s,col,ang,tm){
- c.save();c.translate(x,y);c.rotate(ang||0);
- const k=s*(1+.05*Math.sin((tm||0)*6+i));c.scale(k,k);
- c.fillStyle=c.strokeStyle=col||ENEMIES[i].col;c.lineWidth=2.4;c.lineCap='round';
- if(i==0){
-  c.beginPath();c.arc(0,0,12,0,TAU);c.fill();
-  for(let a=0;a<10;a++){const q=a*.628,x1=Math.cos(q),y1=Math.sin(q);
-   c.beginPath();c.moveTo(x1*12,y1*12);c.lineTo(x1*19,y1*19);c.stroke();
-   c.beginPath();c.arc(x1*20,y1*20,2.6,0,TAU);c.fill()}
- }else if(i==1){
-  c.beginPath();for(let a=0;a<6;a++){const q=a*1.047;c.lineTo(8+Math.cos(q)*11,Math.sin(q)*11)}c.closePath();c.fill();
-  c.beginPath();c.moveTo(-3,0);c.lineTo(-14,0);c.stroke();
-  c.fillRect(-14,-5,3,10);
-  for(const d of [-9,0,9]){c.beginPath();c.moveTo(-14,0);c.lineTo(-24,d);c.stroke()}
- }else if(i==2){
-  for(const p of [[-7,-5],[5,-7],[0,3],[-10,6],[10,4]]){c.beginPath();c.arc(p[0],p[1],7,0,TAU);c.fill()}
- }else if(i==3){
-  c.beginPath();c.ellipse(4,0,17,8,0,0,TAU);c.fill();
-  c.beginPath();c.moveTo(-13,0);c.quadraticCurveTo(-19,-8,-24,0);c.quadraticCurveTo(-29,8,-34,0);c.stroke();
- }else{
-  c.beginPath();c.arc(0,0,12,0,TAU);c.fill();
-  for(let a=0;a<6;a++){const q=a*1.047+.3,r=22+(a%2)*5,x1=Math.cos(q),y1=Math.sin(q);
-   c.beginPath();c.moveTo(x1*10,y1*10);c.lineTo(x1*r,y1*r);c.stroke();
-   c.beginPath();c.arc(x1*r,y1*r,5,0,TAU);c.fill()}
- }
- c.fillStyle='#ffffff55';c.beginPath();c.arc(-2,-4,4,0,TAU);c.fill();
- c.fillStyle='#2a1a2a';c.beginPath();c.arc(6,-4,2,0,TAU);c.arc(6,4,2,0,TAU);c.fill();
- c.restore();
-}
-
-const ORG=[[-120,-60,10],[110,-70,12],[-100,75,9],[125,60,11],[0,-112,8],[-20,118,10],[75,98,7],[-145,5,8],[145,0,9]];
-function drawNucleus(c,tm,hr){
- c.save();
- const g=c.createRadialGradient(-10,-10,5,0,0,46);g.addColorStop(0,'#c9a2e0');g.addColorStop(1,'#7f5bab');
- const p=1+.03*Math.sin(tm*3);
- c.scale(p,p);
- c.beginPath();c.arc(0,0,44,0,TAU);c.fillStyle=g;c.fill();
- c.lineWidth=5;c.strokeStyle=hr>.4?'#e4cdf2':'#e0675f';c.stroke();
- c.fillStyle='#4f3375';c.beginPath();c.arc(-6,-4,15,0,TAU);c.fill();
- c.fillStyle='#ffffff44';c.beginPath();c.arc(-12,-10,5,0,TAU);c.fill();
- c.restore();
-}
-function drawBody(c,pl,tm,wr,hr){
- c.save();
- if(pl){
-  rr(c,-185,-165,370,330,40);c.fillStyle='#aad8aa';c.fill();
-  c.globalAlpha=.35+.65*wr;c.lineWidth=14;c.strokeStyle='#4f9a62';c.stroke();c.globalAlpha=1;
-  c.lineWidth=3;c.strokeStyle='#d6f0d6';rr(c,-177,-157,354,314,34);c.stroke();
-  c.fillStyle='#9ad4e099';c.beginPath();c.ellipse(-95,70,48,64,.4,0,TAU);c.fill();
-  c.fillStyle='#58a85c';
-  for(const o of ORG){c.beginPath();c.ellipse(o[0],o[1],o[2]+6,o[2]-1,o[0]*.02,0,TAU);c.fill()}
- }else{
-  c.beginPath();c.ellipse(0,0,195,170,0,0,TAU);c.fillStyle='#ebc6d3';c.fill();
-  c.globalAlpha=.35+.65*wr;c.lineWidth=7;c.strokeStyle='#f8dfe9';c.stroke();c.globalAlpha=1;
-  c.fillStyle='#e8a76f';
-  for(const o of ORG){c.beginPath();c.ellipse(o[0],o[1],o[2]+7,o[2]-2,o[1]*.02,0,TAU);c.fill()}
-  c.strokeStyle='#d99ab0';c.lineWidth=4;c.lineCap='round';
-  for(let k=0;k<3;k++){c.beginPath();c.moveTo(70,-60+k*9);c.quadraticCurveTo(100,-70+k*9,130,-60+k*9);c.stroke()}
- }
- drawNucleus(c,tm,hr);
- c.restore();
- }
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap');
+:root{--bg:#070c14;--panel:#0d1725;--panel2:#101e30;--line:#24374a;--text:#e6f2fb;--muted:#8ea5b8;--red:#ff3157;--green:#8cff75;--cyan:#5ce7f2;--gold:#ffd36b}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;overflow:hidden}button,input{font:inherit}button{cursor:pointer;color:var(--text);border:1px solid #2c4357;background:linear-gradient(180deg,#17273a,#0d1725);border-radius:8px;padding:10px 13px;font-weight:700;letter-spacing:.04em;transition:.15s}button:hover{border-color:var(--cyan);filter:brightness(1.13)}button:disabled{opacity:.35;cursor:not-allowed}.hidden{display:none!important}
+#splash{position:fixed;inset:0;z-index:100;background:radial-gradient(ellipse at center,#581126 0%,#1b0a17 38%,#05070d 80%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;animation:splashPulse 1.8s ease-in-out infinite alternate}
+#splash:before{content:"";position:absolute;width:45vw;height:45vw;max-width:440px;max-height:440px;border:1px solid #ff315755;border-radius:50%;box-shadow:0 0 70px #ff174466,inset 0 0 70px #ff174422;animation:spin 12s linear infinite}
+.splashMark{font-size:clamp(42px,8vw,92px);color:#ff244e;text-shadow:0 0 12px #ff1744,0 0 45px #ff1744aa;z-index:1;font-family:Orbitron,sans-serif;font-weight:800;letter-spacing:.12em;text-align:center;line-height:1.1}
+.splashSub{z-index:1;color:#ffc0cc;letter-spacing:.45em;font-size:12px;text-transform:uppercase}@keyframes splashPulse{to{filter:brightness(1.2)}}@keyframes spin{to{transform:rotate(360deg)}}
+#app{height:100dvh;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 0%,#13243a 0%,#070c14 62%)}
+.topbar{height:62px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--line);background:#09111ceF;gap:10px}
+.brand{font-family:Orbitron,sans-serif;font-weight:800;font-size:clamp(12px,2vw,18px);letter-spacing:.08em}.brand span{color:var(--red)}.topStats{display:flex;gap:8px;align-items:center}.stat{border:1px solid #263c50;background:#0d1928;border-radius:8px;padding:5px 10px;min-width:70px}.stat small{display:block;color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase}.stat strong{font-family:Orbitron,sans-serif;font-size:15px}.stat .green{color:var(--green)}.stat .red{color:var(--red)}
+.layout{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 275px;gap:10px;padding:10px}
+.arenaWrap{position:relative;min-height:0;border:1px solid #273d52;border-radius:12px;overflow:hidden;background:#07111c;box-shadow:0 0 45px #0008,inset 0 0 50px #07101c}
+#gameCanvas{width:100%;height:100%;display:block;touch-action:manipulation}
+.arenaHud{position:absolute;left:12px;top:12px;display:flex;gap:7px;pointer-events:none;flex-wrap:wrap}.pill{background:#07111de8;border:1px solid #284257;padding:6px 9px;border-radius:7px;font-size:12px;color:#b7cbd9}.pill b{color:var(--cyan);font-family:Orbitron,sans-serif}
+#toast{position:absolute;left:50%;top:18%;transform:translate(-50%,-10px);opacity:0;pointer-events:none;background:#091521ee;border:1px solid var(--cyan);padding:10px 18px;border-radius:9px;box-shadow:0 0 24px #5ce7f233;transition:.25s;z-index:8;text-align:center;font-weight:700}#toast.show{opacity:1;transform:translate(-50%,0)}
+.sidebar{min-height:0;overflow:auto;display:flex;flex-direction:column;gap:9px;padding-right:2px}.panel{border:1px solid var(--line);border-radius:10px;background:linear-gradient(145deg,#101e2d,#0a1420);padding:12px}.panel h3{margin:0 0 9px;font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:.1em;color:#c6d9e6}.subtle{font-size:12px;color:var(--muted);line-height:1.35}.healthRow{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:6px}.bar{height:8px;border-radius:10px;background:#1c2b3b;overflow:hidden;border:1px solid #2a4053}.bar>i{height:100%;display:block;background:linear-gradient(90deg,#ff3157,#ff8d6b);box-shadow:0 0 12px #ff3157;transition:width .2s}.energyBar>i{background:linear-gradient(90deg,#38d9e9,#a6ff86);box-shadow:0 0 12px #5ce7f2}
+.towerList{display:grid;grid-template-columns:1fr 1fr;gap:7px}.tower{padding:9px 7px;text-align:left;min-height:76px;position:relative}.tower.active{border-color:var(--green);box-shadow:0 0 14px #8cff7522;background:#13271f}.tower .glyph{font-size:20px;display:block;margin-bottom:3px}.tower strong{font-size:12px;display:block}.tower small{color:var(--muted);font-size:11px}.tower .cost{position:absolute;right:6px;top:6px;font-size:10px;color:var(--gold)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.primary{background:linear-gradient(180deg,#b91f42,#71152b);border-color:#ff3157}.greenBtn{border-color:#5fba69;color:#b7ffae}.wide{width:100%}
+#startScreen,#modalShade{position:fixed;inset:0;z-index:30;background:#03070ddd;backdrop-filter:blur(9px);display:flex;align-items:center;justify-content:center;padding:16px}
+.startCard,.modal{width:min(700px,100%);max-height:90dvh;overflow:auto;border:1px solid #35516a;border-radius:16px;background:linear-gradient(145deg,#122235,#09121e);padding:clamp(18px,4vw,32px);box-shadow:0 25px 90px #000b}
+.eyebrow{font-family:Orbitron,sans-serif;color:var(--red);font-size:11px;letter-spacing:.25em}.startTitle{font-family:Orbitron,sans-serif;font-size:clamp(24px,5vw,42px);margin:8px 0}.startTitle span{color:var(--red)}.startDesc{color:#9eb5c6;max-width:580px;line-height:1.5}.choiceGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}.cellChoice{padding:16px;text-align:left;min-height:142px}.cellChoice.selected{border-color:var(--green);box-shadow:0 0 25px #8cff7520}.cellChoice .cellIcon{font-size:30px}.cellChoice h3{margin:7px 0 4px;font-family:Orbitron,sans-serif;font-size:13px}.cellChoice p{font-size:13px;color:var(--muted);margin:0;line-height:1.4}.startFoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+#modalShade{z-index:40}.modal{width:min(620px,100%)}.modalHead{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px}.modalHead h2{font-family:Orbitron,sans-serif;font-size:16px;margin:0}.close{padding:4px 10px}.entry{width:100%;background:#07111d;border:1px solid #31485c;color:var(--text);padding:11px;border-radius:8px;outline:none}.entry:focus{border-color:var(--cyan)}.enemyGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.enemyCard{border:1px solid #2a4053;background:#0a1623;border-radius:9px;padding:12px}.enemyCard h4{margin:0 0 6px;color:#ff8ca0;font-family:Orbitron,sans-serif;font-size:12px}.enemyCard p{margin:5px 0;color:#a9bdcb;font-size:13px}.enemyCard b{color:var(--green)}.log{max-height:130px;overflow:auto;color:#93aabd;font-size:12px;line-height:1.5}
+.bottomHint{padding:7px 12px;color:#6f879b;font-size:11px;border-top:1px solid #1b2a3a;display:flex;justify-content:space-between;gap:8px}
+@media(max-width:760px){.topbar{height:55px;padding:6px 9px}.stat{min-width:56px;padding:4px 7px}.stat strong{font-size:12px}.stat small{font-size:9px}.layout{grid-template-columns:minmax(0,1fr) 190px;padding:6px;gap:6px}.panel{padding:8px}.towerList{gap:5px}.tower{padding:7px 5px;min-height:69px}.tower .glyph{font-size:17px}.tower strong{font-size:11px}.tower small{font-size:10px}.panel h3{font-size:10px}.subtle{font-size:11px}.actions button{font-size:11px;padding:8px 5px}.brand{font-size:11px}.topStats{gap:4px}}
+@media(max-width:520px){.layout{grid-template-columns:minmax(0,1fr) 154px}.topStats .stat:nth-child(3){display:none}.brand{max-width:125px;line-height:1.2}.stat{min-width:48px}.towerList{grid-template-columns:1fr 1fr}.tower .glyph{font-size:15px}.tower strong{font-size:10px}.tower small{font-size:9px}.pill{font-size:10px;padding:5px 7px}.arenaHud{left:6px;top:6px}.enemyGrid{grid-template-columns:1fr}.choiceGrid{gap:7px}.cellChoice{padding:11px;min-height:135px}.cellChoice h3{font-size:11px}.cellChoice p{font-size:12px}}
+@media(orientation:portrait) and (max-width:520px){.layout{grid-template-columns:minmax(0,1fr) 148px}.bottomHint{font-size:9px}.topStats .stat:nth-child(2){display:none}}<body>
+<div id="splash"><div class="splashMark">CELLULAR<br>GUARD</div><div class="splashSub">CORE DEFENSE // BIOSECURITY SYSTEM</div></div>
+<div id="app">
+<header class="topbar">
+  <div class="brand">CELLULAR <span>GUARD</span><br><small style="font-size:9px;color:#7690a4;letter-spacing:.23em">CORE DEFENSE</small></div>
+  <div class="topStats">
+    <div class="stat"><small>Core Integrity</small><strong id="healthTop" class="red">100%</strong></div>
+    <div class="stat"><small>ATP Energy</small><strong id="energyTop" class="green">120</strong></div>
+    <div class="stat"><small>Wave</small><strong id="waveTop">01 / 05</strong></div>
+    <div class="stat"><small>Credits</small><strong id="creditsTop">0</strong></div>
+  </div>
+</header>
+<main class="layout">
+  <section class="arenaWrap">
+    <canvas id="gameCanvas" aria-label="Cellular Guard game battlefield"></canvas>
+    <div class="arenaHud"><div class="pill">SECTOR <b id="sector">01</b></div><div class="pill">THREAT <b id="threat">LOW</b></div><div class="pill">MODE <b id="modeLabel">PLANT CELL</b></div></div>
+    <div id="toast"></div>
+  </section>
+  <aside class="sidebar">
+    <div class="panel"><div class="healthRow"><span>NUCLEUS INTEGRITY</span><b id="healthPct" style="color:var(--red)">100%</b></div><div class="bar"><i id="healthBar" style="width:100%"></i></div><div class="subtle" style="margin-top:7px">Protect the core. If integrity reaches zero, the sector is lost.</div></div>
+    <div class="panel"><div class="healthRow"><span>ATP RESERVE</span><b id="energyPct" style="color:var(--cyan)">120</b></div><div class="bar energyBar"><i id="energyBar" style="width:75%"></i></div><div class="subtle" style="margin-top:7px">Energy regenerates over time. Organelles cost ATP to deploy.</div></div>
+    <div class="panel"><h3>DEPLOY ORGANELLES</h3><div class="towerList" id="towerList">
+      <button class="tower active" data-tower="antibody"><span class="cost">35 ATP</span><span class="glyph">✦</span><strong>Antibody Node</strong><small>Balanced · single target</small></button>
+      <button class="tower" data-tower="chloroplast"><span class="cost">50 ATP</span><span class="glyph">❋</span><strong>Chloroplast</strong><small>Energy production</small></button>
+      <button class="tower" data-tower="mitochondria"><span class="cost">60 ATP</span><span class="glyph">ϟ</span><strong>Mitochondria</strong><small>Rapid burst damage</small></button>
+      <button class="tower" data-tower="lysosome"><span class="cost">45 ATP</span><span class="glyph">◉</span><strong>Lysosome</strong><small>Area pulse attack</small></button>
+    </div><p class="subtle" style="margin:9px 0 0">Select a unit, then tap an empty grid cell. Keep towers spaced to cover the approach lanes.</p></div>
+    <div class="panel"><h3>COMMAND</h3><div class="actions"><button class="primary" id="waveBtn">▶ LAUNCH WAVE</button><button id="pauseBtn">Ⅱ PAUSE</button><button id="encyBtn">BIO-HISTORY</button><button id="promoBtn">VIP ACCESS</button></div></div>
+    <div class="panel"><h3>FIELD TELEMETRY</h3><div class="log" id="eventLog">[SYSTEM] Biosecurity grid online.<br>[SCAN] No active breach detected.<br>[CORE] Nucleus shields stable.</div></div>
+  </aside>
+</main>
+<div class="bottomHint"><span>TACTICAL TIP: counter each organism with its biological weakness.</span><span>v1.0 // BIOSECURITY LAB</span></div>
+</div>
+<div id="startScreen">
+  <div class="startCard">
+    <div class="eyebrow">BIOSECURITY PROTOCOL // 001</div>
+    <div class="startTitle">CELLULAR GUARD:<br><span>CORE DEFENSE</span></div>
+    <p class="startDesc">An organism-scale defense simulation. Deploy organelles, manage ATP reserves, and stop hostile microorganisms before they breach the nucleus.</p>
+    <h3 style="font-family:Orbitron,sans-serif;font-size:13px;margin-top:22px">SELECT CELL ARCHITECTURE</h3>
+    <div class="choiceGrid">
+      <button class="cellChoice selected" data-cell="plant"><div class="cellIcon" style="color:#8cff75">⬡</div><h3>PLANT CELL</h3><p>Reinforced cell wall. Higher core durability and stronger starting defenses.</p><p style="color:#8cff75;margin-top:9px">+30% integrity · +10% tower range</p></button>
+      <button class="cellChoice" data-cell="animal"><div class="cellIcon" style="color:#5ce7f2">◉</div><h3>ANIMAL CELL</h3><p>Flexible membrane. Superior ATP generation and faster deployment economy.</p><p style="color:#5ce7f2;margin-top:9px">+35% ATP regeneration · lower build cost</p></button>
+    </div>
+    <div class="startFoot"><span class="subtle">Landscape recommended · works with mouse or touch</span><button class="primary" id="beginBtn">INITIALIZE DEFENSE →</button></div>
+  </div>
+</div>
+<div id="modalShade" class="hidden"><div class="modal"><div class="modalHead"><h2 id="modalTitle">BIO-HISTORY ENCYCLOPEDIA</h2><button class="close" id="modalClose">✕</button></div><div id="modalContent"></div></div></div>
+<script>(()=>{'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const canvas=$('#gameCanvas'),ctx=canvas.getContext('2d',{alpha:false});
+const COST={antibody:35,chloroplast:50,mitochondria:60,lysosome:45};
+const TOWERS={
+ antibody:{name:'Antibody Node',cost:35,range:155,rate:.68,damage:15,color:'#5ce7f2',speed:430},
+ chloroplast:{name:'Chloroplast',cost:50,range:135,rate:1.15,damage:8,color:'#8cff75',speed:350},
+ mitochondria:{name:'Mitochondria',cost:60,range:180,rate:.95,damage:28,color:'#ffb65c',speed:510},
+ lysosome:{name:'Lysosome',cost:45,range:115,rate:1.25,damage:12,color:'#ce8cff',speed:300,aoe:48}
+};
+const ENEMIES={
+ virus:{name:'Genetic Virus',shape:'virus',color:'#ff3157',hp:45,speed:30,damage:8,reward:12,weak:'Antibody Node',desc:'Spiked protein shell carrying invasive genetic material. Fast, fragile, and adept at slipping through gaps.',morph:'Icosahedral capsid with surface glycoprotein spikes.'},
+ bacteria:{name:'Aggressive Bacteria',shape:'bac',color:'#ff9a55',hp:100,speed:19,damage:13,reward:18,weak:'Mitochondria',desc:'Armored rod-shaped invader. Its dense outer membrane makes it resilient, but concentrated burst energy disrupts its structure.',morph:'Rod-shaped cell with flagella and a protective envelope.'},
+ fungi:{name:'Fungal Spore',shape:'fungi',color:'#c58cff',hp:72,speed:14,damage:10,reward:16,weak:'Lysosome',desc:'A drifting spore cluster that resists ordinary attacks. Enzymatic area pulses are especially effective against its clustered growth.',morph:'Round spore body with branching filament-like hyphae.'}
+};
+let W=900,H=560,dpr=1,last=0,elapsed=0,selectedCell='plant',selectedTower='antibody',running=false,paused=false,started=false,gameOver=false;
+let health=100,maxHealth=100,energy=120,maxEnergy=160,credits=0,wave=0,waveActive=false,spawnQueue=[],spawnTimer=0,spawned=0,kills=0;
+let towers=[],enemies=[],bullets=[],particles=[],floating=[],grid=[],lastWaveEnd=0,mouse={x:0,y:0},hoverCell=null,shake=0;
+let secretUsed=false,vip=false;
+const core={x:0,y:0,r:38};
+const rnd=(a,b)=>a+Math.random()*(b-a),dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function log(s){const el=$('#eventLog');el.innerHTML=`[${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'})}] ${s}<br>`+el.innerHTML;el.innerHTML=el.innerHTML.split('<br>').slice(0,7).join('<br>')}
+function toast(s){const t=$('#toast');t.textContent=s;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),1800)}
+function sound(freq=440,duration=.07,type='sine',gain=.035){try{const AC=window.AudioContext||window.webkitAudioContext;if(!sound.ac)sound.ac=new AC();const a=sound.ac,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(freq,a.currentTime);g.gain.setValueAtTime(gain,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+duration);o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+duration)}catch(e){}}
+function resize(){const r=canvas.getBoundingClientRect();dpr=Math.min(window.devicePixelRatio||1,2);W=Math.max(320,r.width);H=Math.max(280,r.height);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);core.x=W*.5;core.y=H*.5;core.r=Math.max(25,Math.min(39,W*.047));makeGrid()}
+function makeGrid(){grid=[];const cols=Math.max(5,Math.floor(W/65)),rows=Math.max(4,Math.floor(H/62)),cw=W/cols,ch=H/rows;for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){let px=(x+.5)*cw,py=(y+.5)*ch;if(Math.hypot(px-core.x,py-core.y)>core.r+29)grid.push({x:px,y:py,cw,ch,col:x,row:y})}}
+window.addEventListener('resize',resize);resize();function cellAt(x,y){return grid.find(c=>Math.abs(c.x-x)<c.cw*.48&&Math.abs(c.y-y)<c.ch*.48)}
+function costFor(type){return Math.max(10,Math.round(COST[type]*(selectedCell==='animal'?.86:1)*(vip?.5:1)))}
+function initGame(){maxHealth=selectedCell==='plant'?130:100;health=maxHealth;maxEnergy=selectedCell==='animal'?190:160;energy=selectedCell==='animal'?150:120;credits=100;wave=0;waveActive=false;spawnQueue=[];spawned=0;kills=0;towers=[];enemies=[];bullets=[];particles=[];floating=[];gameOver=false;paused=false;running=true;started=true;selectedTower='antibody';$$('.tower').forEach(b=>b.classList.toggle('active',b.dataset.tower===selectedTower));$('#startScreen').classList.add('hidden');$('#waveBtn').disabled=false;log('CORE ONLINE. '+selectedCell.toUpperCase()+' ARCHITECTURE ENGAGED.');toast('DEFENSE GRID INITIALIZED');updateHud()}
+function updateHud(){let pct=Math.max(0,Math.round(health/maxHealth*100));$('#healthTop').textContent=pct+'%';$('#healthPct').textContent=pct+'%';$('#healthBar').style.width=pct+'%';$('#healthTop').style.color=pct<35?'#ff3157':'#8cff75';$('#energyTop').textContent=Math.floor(energy);$('#energyPct').textContent=Math.floor(energy);$('#energyBar').style.width=clamp(energy/maxEnergy*100,0,100)+'%';$('#creditsTop').textContent=credits;$('#waveTop').textContent=String(Math.min(wave,5)).padStart(2,'0')+' / 05';$('#sector').textContent=String(Math.min(wave+1,5)).padStart(2,'0');$('#modeLabel').textContent=selectedCell.toUpperCase()+' CELL';$('#threat').textContent=waveActive?'ACTIVE':(wave>=5?'CLEARED':'LOW');$('#threat').style.color=waveActive?'#ff647d':'#8cff75'}
+function launchWave(){if(!running||paused||gameOver)return;if(waveActive){toast('WAVE ALREADY IN PROGRESS');return}if(wave>=5){toast('ALL SECTORS CLEARED');return}wave++;waveActive=true;spawned=0;const count=5+wave*3;spawnQueue=[];for(let i=0;i<count;i++){let type;if(wave===1)type=Math.random()<.82?'virus':'bacteria';else{let p=Math.random();type=p<.48?'virus':p<.82?'bacteria':'fungi'}spawnQueue.push(type)}spawnTimer=.3;$('#waveBtn').textContent='WAVE '+wave+' IN PROGRESS';log('WAVE '+wave+' DETECTED // '+count+' HOSTILES INBOUND');toast('WAVE '+wave+' — HOSTILES INBOUND');sound(180,.18,'sawtooth',.04)}
+function spawnEnemy(type){let edge=Math.floor(Math.random()*4),x,y,pad=20;if(edge===0){x=rnd(20,W-20);y=-pad}else if(edge===1){x=W+pad;y=rnd(20,H-20)}else if(edge===2){x=rnd(20,W-20);y=H+pad}else{x=-pad;y=rnd(20,H-20)}let def=ENEMIES[type],scale=1+(wave-1)*.22;enemies.push({type,x,y,hp:def.hp*scale,maxHp:def.hp*scale,speed:def.speed*(1+(wave-1)*.035),damage:def.damage,reward:def.reward,phase:rnd(0,6),r:type==='bacteria'?13:11,attack:0});spawned++}
+function placeTower(c){if(!c||!running||paused||gameOver)return; if(towers.some(t=>Math.hypot(t.x-c.x,t.y-c.y)<14)){toast('GRID CELL OCCUPIED');return}if(Math.hypot(c.x-core.x,c.y-core.y)<core.r+35){toast('CORE SANCTUARY: BUILD BLOCKED');return}const type=selectedTower,cost=costFor(type);if(energy<cost){toast('INSUFFICIENT ATP');sound(120,.1,'square',.025);return}energy-=cost;towers.push({x:c.x,y:c.y,type,cd:rnd(0,.3),phase:rnd(0,8),level:1});floating.push({x:c.x,y:c.y-15,text:'-'+cost+' ATP',color:'#5ce7f2',life:1});sound(520,.09,'triangle');log(TOWERS[type].name.toUpperCase()+' DEPLOYED');updateHud()}
+function targetFor(t){let best=null,bestD=Infinity;for(const e of enemies){let d=dist(t,e);if(d<TOWERS[t.type].range&&d<bestD){best=e;bestD=d}}return best}
+function damageEnemy(e,amount,color){e.hp-=amount;for(let i=0;i<4;i++)particles.push({x:e.x,y:e.y,vx:rnd(-45,45),vy:rnd(-45,45),life:rnd(.18,.42),max:.42,color:color||'#ff6a88',r:rnd(1,3)});if(e.hp<=0){e.dead=true;kills++;credits+=e.reward;energy=Math.min(maxEnergy,energy+4);floating.push({x:e.x,y:e.y-10,text:'+'+e.reward+' CR',color:'#ffd36b',life:1.0});sound(620,.045,'triangle',.018)}}
+function update(dt){if(!running||paused||gameOver)return;elapsed+=dt;energy=Math.min(maxEnergy,energy+dt*(selectedCell==='animal'?5.3:3.9));if(waveActive&&spawnQueue.length){spawnTimer-=dt;if(spawnTimer<=0){spawnEnemy(spawnQueue.shift());spawnTimer=Math.max(.28,.85-wave*.07)*rnd(.65,1.2)}}for(const t of towers){t.phase+=dt; t.cd-=dt;if(t.cd<=0){let target=targetFor(t);if(target){const def=TOWERS[t.type];t.cd=def.rate*(selectedCell==='plant'?.96:1);if(t.type==='chloroplast'){energy=Math.min(maxEnergy,energy+5);particles.push({x:t.x,y:t.y,vx:0,vy:-20,life:.5,max:.5,color:'#8cff75',r:3})}else{bullets.push({x:t.x,y:t.y,target,damage:def.damage*(target.type==='bacteria'&&t.type==='mitochondria'?1.7:target.type==='fungi'&&t.type==='lysosome'?1.8:1),speed:def.speed,color:def.color,aoe:def.aoe||0});sound(t.type==='mitochondria'?260:390,.035,'sine',.009)}}else if(t.type==='chloroplast'&&Math.random()<.035){energy=Math.min(maxEnergy,energy+2)}}}
+for(const b of bullets){if(!b.target||b.target.dead) {b.dead=true;continue}const dx=b.target.x-b.x,dy=b.target.y-b.y,d=Math.hypot(dx,dy)||1,step=b.speed*dt;if(d<=step+5){b.dead=true;if(b.aoe){for(const e of enemies)if(!e.dead&&dist(e,b.target)<b.aoe)damageEnemy(e,b.damage,b.color);for(let i=0;i<18;i++)particles.push({x:b.target.x,y:b.target.y,vx:rnd(-100,100),vy:rnd(-100,100),life:.5,max:.5,color:b.color,r:rnd(2,4)})}else damageEnemy(b.target,b.damage,b.color)}else{b.x+=dx/d*step;b.y+=dy/d*step}}
+for(const e of enemies){if(e.dead)continue;e.phase+=dt;let dx=core.x-e.x,dy=core.y-e.y,d=Math.hypot(dx,dy)||1;if(d<core.r+8){health-=e.damage*dt*.8;e.attack+=dt;if(e.attack>.8){e.attack=0;shake=5;for(let i=0;i<8;i++)particles.push({x:core.x+rnd(-core.r,core.r),y:core.y+rnd(-core.r,core.r),vx:rnd(-80,80),vy:rnd(-80,80),life:.4,max:.4,color:'#ff3157',r:3})}}else{e.x+=dx/d*e.speed*dt;e.y+=dy/d*e.speed*dt}}
+enemies=enemies.filter(e=>!e.dead);bullets=bullets.filter(b=>!b.dead);
+for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=Math.pow(.08,dt);p.vy*=Math.pow(.08,dt);p.life-=dt}particles=particles.filter(p=>p.life>0);
+for(const f of floating){f.y-=18*dt;f.life-=dt}floating=floating.filter(f=>f.life>0);
+if(health<=0){health=0;gameOver=true;waveActive=false;$('#waveBtn').textContent='RESTART SECTOR';$('#waveBtn').disabled=false;toast('CORE BREACHED');log('CRITICAL FAILURE // CORE INTEGRITY LOST');showEnd(false)}
+if(waveActive&&spawnQueue.length===0&&enemies.length===0){waveActive=false;credits+=35+wave*10;energy=Math.min(maxEnergy,energy+25);$('#waveBtn').textContent=wave>=5?'SECTORS CLEARED':'▶ LAUNCH WAVE';log('WAVE '+wave+' NEUTRALIZED // BONUS RESOURCES SECURED');toast('WAVE CLEARED  +'+(35+wave*10)+' CREDITS');sound(720,.16,'sine',.035);if(wave>=5){gameOver=true;showEnd(true)}}
+updateHud()}
+function showEnd(win){setTimeout(()=>{if(!gameOver)return;openModal(win?'SECTOR SECURED':'CORE BREACHED',`<div style="text-align:center;padding:16px 0"><div style="font-size:46px;color:${win?'#8cff75':'#ff3157'}">${win?'✦':'⚠'}</div><h2 style="font-family:Orbitron,sans-serif;color:${win?'#8cff75':'#ff7890'}">${win?'BIOSECURITY RESTORED':'DEFENSE COLLAPSED'}</h2><p class="subtle">Waves survived: ${wave}/5 · Hostiles neutralized: ${kills} · Credits secured: ${credits}</p><button class="primary" id="againBtn">REINITIALIZE SYSTEM</button></div>`);$('#againBtn').onclick=()=>{closeModal();initGame()};},350)}function draw(){ctx.save();if(shake>0){ctx.translate(rnd(-shake,shake),rnd(-shake,shake));shake*=.82;if(shake<.3)shake=0}ctx.fillStyle='#07111c';ctx.fillRect(0,0,W,H);
+let g=ctx.createRadialGradient(core.x,core.y,20,core.x,core.y,Math.max(W,H)*.65);g.addColorStop(0,'#14283a');g.addColorStop(.5,'#0b1928');g.addColorStop(1,'#060c14');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ctx.strokeStyle='#29405633';ctx.lineWidth=1;for(let x=0;x<W;x+=28){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=0;y<H;y+=28){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+ctx.strokeStyle='#5ce7f215';ctx.setLineDash([3,8]);ctx.lineWidth=1;ctx.beginPath();ctx.arc(core.x,core.y,core.r+65+Math.sin(elapsed*1.5)*3,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+for(const c of grid){ctx.strokeStyle=hoverCell===c?'#8cff7599':'#8bb3cc17';ctx.lineWidth=hoverCell===c?1.5:1;ctx.strokeRect(c.x-c.cw*.43,c.y-c.ch*.43,c.cw*.86,c.ch*.86);if(hoverCell===c){ctx.fillStyle='#8cff7510';ctx.fillRect(c.x-c.cw*.43,c.y-c.ch*.43,c.cw*.86,c.ch*.86)}}
+for(const t of towers){const d=TOWERS[t.type];ctx.save();ctx.shadowBlur=15;ctx.shadowColor=d.color;ctx.strokeStyle=d.color+'99';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(t.x,t.y,16+Math.sin(t.phase*2)*1.5,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#0b1724';ctx.beginPath();ctx.arc(t.x,t.y,12,0,Math.PI*2);ctx.fill();ctx.strokeStyle=d.color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(t.x,t.y,7,0,Math.PI*1.55);ctx.stroke();ctx.fillStyle=d.color;ctx.beginPath();ctx.arc(t.x,t.y,3,0,Math.PI*2);ctx.fill();if(t.type==='chloroplast'){for(let i=0;i<5;i++){ctx.beginPath();ctx.ellipse(t.x+Math.cos(i*1.25+t.phase)*7,t.y+Math.sin(i*1.25+t.phase)*7,3,1.5,i,0,Math.PI*2);ctx.fill()}}ctx.restore()}
+for(const b of bullets){ctx.save();ctx.shadowBlur=12;ctx.shadowColor=b.color;ctx.fillStyle=b.color;ctx.beginPath();ctx.arc(b.x,b.y,3.2,0,Math.PI*2);ctx.fill();ctx.restore()}
+for(const e of enemies){ctx.save();ctx.translate(e.x,e.y);ctx.rotate(e.phase*.25);ctx.shadowBlur=12;ctx.shadowColor=ENEMIES[e.type].color;ctx.strokeStyle=ENEMIES[e.type].color;ctx.fillStyle=ENEMIES[e.type].color+'33';ctx.lineWidth=2;
+if(e.type==='virus'){ctx.beginPath();for(let i=0;i<12;i++){let a=i*Math.PI/6,r=i%2?e.r:e.r+5;let x=Math.cos(a)*r,y=Math.sin(a)*r;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#ffb4c1';ctx.beginPath();ctx.arc(0,0,4,0,Math.PI*2);ctx.fill();for(let i=0;i<8;i++){let a=i*Math.PI/4;ctx.beginPath();ctx.moveTo(Math.cos(a)*13,Math.sin(a)*13);ctx.lineTo(Math.cos(a)*18,Math.sin(a)*18);ctx.stroke()}}
+else if(e.type==='bacteria'){ctx.beginPath();ctx.ellipse(0,0,15,8,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.strokeStyle='#ffb77a';ctx.beginPath();ctx.moveTo(-5,-2);ctx.bezierCurveTo(0,-8,5,8,9,0);ctx.stroke();for(let i=0;i<5;i++){let a=i*1.2;ctx.beginPath();ctx.moveTo(Math.cos(a)*13,Math.sin(a)*8);ctx.lineTo(Math.cos(a)*20,Math.sin(a)*13);ctx.stroke()}}
+else{ctx.beginPath();ctx.arc(0,0,11,0,Math.PI*2);ctx.fill();ctx.stroke();for(let i=0;i<5;i++){let a=i*1.25;ctx.beginPath();ctx.moveTo(Math.cos(a)*6,Math.sin(a)*6);ctx.lineTo(Math.cos(a)*15,Math.sin(a)*15);ctx.stroke()}}
+ctx.restore();ctx.fillStyle='#1a2634';ctx.fillRect(e.x-13,e.y-e.r-11,26,3);ctx.fillStyle=e.hp/e.maxHp>.5?'#8cff75':'#ff3157';ctx.fillRect(e.x-13,e.y-e.r-11,26*clamp(e.hp/e.maxHp,0,1),3)}
+// nucleus
+ctx.save();ctx.shadowBlur=28;ctx.shadowColor='#ff3157';ctx.strokeStyle='#ff3157aa';ctx.lineWidth=2;ctx.beginPath();ctx.arc(core.x,core.y,core.r+8+Math.sin(elapsed*2)*2,0,Math.PI*2);ctx.stroke();let ng=ctx.createRadialGradient(core.x-10,core.y-12,2,core.x,core.y,core.r);ng.addColorStop(0,'#ff8197');ng.addColorStop(.42,'#b51f46');ng.addColorStop(1,'#3a1026');ctx.fillStyle=ng;ctx.beginPath();ctx.arc(core.x,core.y,core.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#ff7c94';ctx.lineWidth=1;ctx.beginPath();ctx.arc(core.x,core.y,core.r-7,0,Math.PI*2);ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#ffdbe1';ctx.font='bold 10px Orbitron';ctx.textAlign='center';ctx.fillText('NUCLEUS',core.x,core.y+core.r+21);ctx.restore();
+for(const p of particles){ctx.globalAlpha=clamp(p.life/p.max,0,1);ctx.fillStyle=p.color;ctx.shadowBlur=8;ctx.shadowColor=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;ctx.shadowBlur=0;
+for(const f of floating){ctx.globalAlpha=clamp(f.life,0,1);ctx.fillStyle=f.color;ctx.font='bold 12px Rajdhani';ctx.textAlign='center';ctx.fillText(f.text,f.x,f.y)}ctx.globalAlpha=1;
+if(hoverCell&&started&&!gameOver){ctx.strokeStyle='#8cff75aa';ctx.lineWidth=2;ctx.beginPath();ctx.arc(hoverCell.x,hoverCell.y,16,0,Math.PI*2);ctx.stroke()}
+ctx.restore()}
+function frame(ts){if(!last)last=ts;let dt=Math.min((ts-last)/1000,.04);last=ts;update(dt);draw();requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+function pointerPos(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+canvas.addEventListener('pointermove',e=>{const p=pointerPos(e);mouse=p;hoverCell=cellAt(p.x,p.y)});
+canvas.addEventListener('pointerleave',()=>hoverCell=null);
+canvas.addEventListener('pointerdown',e=>{if(!started||gameOver)return;const p=pointerPos(e);placeTower(cellAt(p.x,p.y))});
+$$('.tower').forEach(b=>b.addEventListener('click',()=>{selectedTower=b.dataset.tower;$$('.tower').forEach(x=>x.classList.toggle('active',x===b));toast(TOWERS[selectedTower].name+' SELECTED')}));
+$$('.cellChoice').forEach(b=>b.addEventListener('click',()=>{selectedCell=b.dataset.cell;$$('.cellChoice').forEach(x=>x.classList.toggle('selected',x===b))}));
+$('#beginBtn').addEventListener('click',()=>{initGame();sound(330,.15,'sine',.04)});
+$('#waveBtn').addEventListener('click',()=>{if(gameOver){initGame();return}launchWave()});
+$('#pauseBtn').addEventListener('click',()=>{if(!started||gameOver)return;paused=!paused;$('#pauseBtn').textContent=paused?'▶ RESUME':'Ⅱ PAUSE';toast(paused?'SIMULATION PAUSED':'SIMULATION RESUMED');if(!paused)last=performance.now()});
+function openModal(title,content){$('#modalTitle').textContent=title;$('#modalContent').innerHTML=content;$('#modalShade').classList.remove('hidden')}
+function closeModal(){$('#modalShade').classList.add('hidden')}
+$('#modalClose').addEventListener('click',closeModal);$('#modalShade').addEventListener('click',e=>{if(e.target===$('#modalShade'))closeModal()});
+$('#encyBtn').addEventListener('click',()=>{let content='<p class="subtle">Field notes identify morphology, behavior, and countermeasures. Match the deployed organelle to the target weakness for improved damage.</p><div class="enemyGrid">';for(const [k,e] of Object.entries(ENEMIES))content+=`<div class="enemyCard"><h4>${e.name}</h4><p><b>Morphology:</b> ${e.morph}</p><p>${e.desc}</p><p><b>Recommended counter:</b> ${e.weak}</p><p style="color:${e.color}">Threat profile: ${k==='virus'?'rapid / low armor':k==='bacteria'?'slow / heavy armor':'slow / enzyme resistant'}</p></div>`;content+='</div><p class="subtle" style="margin-top:12px">Research note: these game mechanics are simplified for strategy and are not medical advice.</p>';openModal('BIO-HISTORY ENCYCLOPEDIA',content)});
+$('#promoBtn').addEventListener('click',()=>openModal('VIP ACCESS // AUTHORIZATION',`<p class="subtle">Enter a valid lab authorization code to activate the VIP PRO protocol. Codes are case-sensitive.</p><form id="promoForm"><input class="entry" id="promoInput" autocomplete="off" placeholder="ENTER PROMO CODE" maxlength="40"><button class="primary wide" style="margin-top:10px" type="submit">AUTHORIZE ACCESS</button></form><p id="promoMsg" class="subtle" style="margin-top:10px">VIP access changes this local game session only.</p>`));
+document.addEventListener('submit',e=>{if(e.target.id!=='promoForm')return;e.preventDefault();const val=$('#promoInput').value.trim();const msg=$('#promoMsg');if(val==='MARWAN_PRO'&&!secretUsed){secretUsed=true;vip=true;credits+=5000;energy=maxEnergy;towers.forEach(t=>t.level=2);msg.innerHTML='<b style="color:#8cff75">VIP PRO AUTHORIZED. +5,000 credits, ATP replenished, deployment costs reduced.</b>';log('VIP PRO AUTHORIZATION ACCEPTED');toast('VIP PRO ACTIVATED');sound(880,.3,'triangle',.05);updateHud()}else if(val==='MARWAN_PRO'&&secretUsed){msg.textContent='This code has already been redeemed in this session.'}else{msg.innerHTML='<span style="color:#ff7890">ACCESS DENIED // INVALID AUTHORIZATION CODE</span>';sound(120,.14,'square',.025)}});
+setTimeout(()=>$('#splash').classList.add('hidden'),2000);
+})();
+</script>
+</body>
+</html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </style>
