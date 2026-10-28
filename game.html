@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Microbe War: Bio Defense</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{margin:0;height:100%;background:#000;color:#0f0;font-family:Tahoma,Arial,sans-serif;overflow:hidden}
+.scr{position:fixed;inset:0;background:radial-gradient(#031a03,#000);display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:5;overflow:auto;padding:10px;text-align:center}
+.scr.on{display:flex}
+h1{margin:0;font-size:28px;text-shadow:0 0 14px #0f0}
+h2{margin:0;font-size:20px;text-shadow:0 0 10px #0f0}
+.b{background:#021;color:#0f0;border:2px solid #0f0;border-radius:8px;padding:7px 16px;font-size:15px;margin:2px;box-shadow:0 0 8px #0f06;font-family:inherit}
+.b.sel{background:#0f0;color:#000}
+.b:disabled{opacity:.4}
+input{background:#000;color:#0f0;border:2px solid #0f0;border-radius:8px;padding:7px;font-size:15px;width:150px;text-align:center}
+.card{border:1px solid #0f0;border-radius:8px;padding:6px 10px;margin:3px;font-size:13px;max-width:560px}
+#game{position:fixed;inset:0;display:none;flex-direction:row;direction:ltr;background:#000}
+#cw{flex:1;display:flex;align-items:center;justify-content:center}
+#side{width:104px;padding:4px;display:flex;flex-direction:column;gap:4px;font-size:12px;overflow-y:auto;background:#010;text-align:center;border-left:1px solid #0f0}
+.t{background:#021;color:#0f0;border:2px solid #063;border-radius:8px;padding:3px;font-size:11px;font-family:inherit}
+.t.sel{border-color:#0f0;background:#052}
+</style></head><body>
+
+<div class="scr on" id="splash"><h1 data-t="title"></h1><button class="b" onclick="show('menu')" data-t="start"></button></div>
+
+<div class="scr" id="menu"><h2 data-t="title"></h2>
+<div><button class="b" id="ca" onclick="pick('animal')" data-t="animal"></button><button class="b" id="cp" onclick="pick('plant')" data-t="plant"></button></div>
+<div id="cdesc"></div>
+<div><button class="b" onclick="lv(-1)">-</button> <span><span data-t="level"></span> <b id="lv"></b></span> <button class="b" onclick="lv(1)">+</button></div>
+<div>🪙 <b id="mc"></b> <b id="pb"></b></div>
+<div><button class="b" onclick="startGame()" data-t="play"></button><button class="b" onclick="show('shop')" data-t="shop"></button><button class="b" onclick="show('book')" data-t="book"></button><button class="b" onclick="show('set')" data-t="settings"></button></div></div>
+
+<div class="scr" id="shop"><h2><span data-t="shop"></span> 🪙 <span id="sc"></span></h2>
+<div id="ups"></div>
+<div><input id="cd" data-ph="code"> <button class="b" onclick="promo()" data-t="apply"></button></div>
+<div id="pm"></div>
+<button class="b" onclick="show('menu')" data-t="back"></button></div>
+
+<div class="scr" id="book"><h2 data-t="book"></h2><div id="bk"></div><button class="b" onclick="show('menu')" data-t="back"></button></div>
+
+<div class="scr" id="set"><h2 data-t="settings"></h2>
+<div><span data-t="sound"></span> <input type="range" id="vol" min="0" max="1" step="0.1" style="width:140px" oninput="S.vol=+this.value;save();beep(500,.1)"></div>
+<div><span data-t="lang"></span> <button class="b" onclick="setLang('ar')">عربي</button><button class="b" onclick="setLang('en')">English</button></div>
+<button class="b" onclick="show('menu')" data-t="back"></button></div>
+
+<div class="scr" id="res"><h1 id="rt"></h1><div id="rg"></div>
+<div><button class="b" id="nx" onclick="nextL()" data-t="next"></button><button class="b" onclick="startGame()" data-t="retry"></button><button class="b" onclick="show('menu')" data-t="menu"></button></div></div>
+
+<div id="game"><div id="cw"><canvas id="cv" width="800" height="350"></canvas></div>
+<div id="side">
+<div>🪙 <b id="hc"></b></div><div>⚡ <b id="he"></b></div><div>🛡️ <b id="hw"></b></div><div><span data-t="level"></span> <b id="hl"></b></div>
+<button class="t" id="tb0" onclick="sel(0)"></button><button class="t" id="tb1" onclick="sel(1)"></button><button class="t" id="tb2" onclick="sel(2)"></button>
+<button class="t" onclick="G.paused=!G.paused" data-t="pause"></button>
+<button class="t" onclick="show('menu')" data-t="menu"></button></div></div>
+
+<script>
+const T={
+ar:{title:"حرب الميكروبات: الدفاع الحيوي",start:"ابدأ",settings:"الإعدادات",play:"العب",shop:"المتجر",book:"الموسوعة",back:"رجوع",sound:"الصوت",lang:"اللغة",animal:"خلية حيوانية",plant:"خلية نباتية",animalD:"سيتوبلازم مرن + طاقة سريعة",plantD:"جدار خلوي قوي جداً",level:"المستوى",up_wall:"الجدار الخلوي",up_cyto:"قوة السيتوبلازم",up_en:"إنتاج الطاقة",up_wpn:"الأسلحة والمضادات",code:"أدخل الكود",apply:"تفعيل",bad:"كود غير صحيح",used:"الكود مستخدم من قبل",pro:"تم فتح حساب PRO!",win:"انتصار!",lose:"خسرت!",next:"التالي",retry:"إعادة",menu:"القائمة",pause:"إيقاف",virus:"فيروس",bact:"بكتيريا",fung:"فطر",weak:"نقطة الضعف",tool:"الأداة",t0:"مضاد حيوي",t1:"مضاد فيروسات",t2:"مضاد فطريات",vd:"سريع وضعيف الجسم، لا يملك خلية ويتكاثر داخل الخلايا.",bd:"متوسط القوة، تثبط المضادات الحيوية جدارها وتقتلها.",fd:"بطيء وصلب بجدار من الكيتين، لا يؤثر فيه إلا مضاد الفطريات.",gain:"الكوينز المكتسبة"},
+en:{title:"Microbe War: Bio Defense",start:"Start",settings:"Settings",play:"Play",shop:"Shop",book:"Encyclopedia",back:"Back",sound:"Sound",lang:"Language",animal:"Animal Cell",plant:"Plant Cell",animalD:"Flexible cytoplasm + fast energy",plantD:"Very strong cell wall",level:"Level",up_wall:"Cell Wall",up_cyto:"Cytoplasm Power",up_en:"Energy Production",up_wpn:"Weapons & Antibiotics",code:"Enter code",apply:"Apply",bad:"Invalid code",used:"Code already used",pro:"PRO Account Unlocked!",win:"Victory!",lose:"Defeat!",next:"Next",retry:"Retry",menu:"Menu",pause:"Pconst $=id=>document.getElementById(id);
+const t=k=>T[S.lang][k]||k;
+function save(){try{localStorage.setItem('mw',JSON.stringify(S))}catch(e){}}
+try{Object.assign(S,JSON.parse(localStorage.getItem('mw')||'{}'))}catch(e){}
+let ac;
+function beep(f,d){if(!S.vol)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.value=S.vol*.15;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+const E=[{k:'virus',hp:30,sp:42,d:5,c:'#f4f',tool:1,ic:'🦠'},{k:'bact',hp:60,sp:28,d:8,c:'#fa0',tool:0,ic:'🧫'},{k:'fung',hp:140,sp:16,d:14,c:'#4cf',tool:2,ic:'🍄'}];
+const TW=[{cost:50,c:'#0f0',dmg:10,ic:'💊'},{cost:75,c:'#0ff',dmg:10,ic:'💉'},{cost:100,c:'#fe0',dmg:14,ic:'🧪'}];
+const cv=$('cv'),cx=cv.getContext('2d'),W=800,H=350,C0=50,CW=70,RH=70;
+let G=null,last=0;
+
+function show(id){
+ document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id==id));
+ $('game').style.display=id=='game'?'flex':'none';
+ if(id!='game'&&G)G.run=false;
+ refresh();
+}
+function setLang(l){S.lang=l;save();refresh()}
+function refresh(){
+ document.documentElement.lang=S.lang;
+ document.documentElement.dir=S.lang=='ar'?'rtl':'ltr';
+ document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
+ document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=t(e.dataset.ph));
+ $('ca').classList.toggle('sel',S.cell=='animal');
+ $('cp').classList.toggle('sel',S.cell=='plant');
+ $('cdesc').textContent=t(S.cell=='animal'?'animalD':'plantD');
+ $('lv').textContent=S.lvl+' / 300';
+ $('mc').textContent=Math.floor(S.coins);
+ $('sc').textContent=Math.floor(S.coins);
+ $('pb').textContent=S.pro?'⭐ PRO':'';
+ $('vol').value=S.vol;
+ for(let i=0;i<3;i++)$('tb'+i).innerHTML=TW[i].ic+'<br>'+t('t'+i)+'<br>'+TW[i].cost+'⚡';
+ sel(G?G.sel:0);
+ let u='';
+ for(const k of ['wall','cyto','en','wpn']){
+  const n=S.up[k];
+  u+='<div><button class="b" '+(n>=20?'disabled':'')+' onclick="buy(\''+k+'\')">'+t('up_'+k)+' ['+n+'/20] — '+(n>=20?'MAX':cost(k)+' 🪙')+'</button></div>';
+ }
+ $('ups').innerHTML=u;
+ let b='';
+ for(const e of E){
+  b+='<div class="card"><b>'+e.ic+' '+t(e.k)+'</b><br>'+t(e.k[0]+'d')+'<br>'+t('weak')+' / '+t('tool')+': <b>'+t('t'+e.tool)+'</b></div>';
+ }
+ $('bk').innerHTML=b;
+}
+function cost(k){return Math.round(100*Math.pow(S.up[k]+1,1.6))}
+function buy(k){
+ if(S.up[k]>=20||S.coins<cost(k)){beep(150,.2);return}
+ S.coins-=cost(k);S.up[k]++;save();beep(700,.1);refresh();
+}
+function promo(){
+ const c=$('cd').value.trim().toUpperCase();
+ const ok=['MARWAN_PRO','REV_VIP'];
+ let m;
+ if(!ok.includes(c))m=t('bad');
+ else if(S.used.includes(c))m=t('used');
+ else{S.used.push(c);S.coins+=50000;S.pro=true;save();m=t('pro')+' +50,000 🪙';beep(900,.3)}
+ refresh();$('pm').textContent=m;
+}
+function pick(c){S.cell=c;save();refresh()}
+function lv(d){S.lvl=Math.max(1,Math.min(S.max,300,S.lvl+d));save();refresh()}
+function sel(i){if(G)G.sel=i;for(let j=0;j<3;j++)$('tb'+j).classList.toggle('sel',j==i)}
+
+function fit(){
+ const r=$('cw').getBoundingClientRect(),s=Math.min(r.width/W,r.height/H);
+ cv.style.width=W*s+'px';cv.style.height=H*s+'px';
+}
+addEventListener('resize',fit);
+
+function startGame(){
+ const pl=S.cell=='plant',L=S.lvl;
+ const wm=(200+S.up.wall*80)*(pl?2.5:1),n=Math.min(8+(L>>1),60);
+ G={en:100,wh:wm,wm,es:[],ts:[],bs:[],sel:0,sp:1,left:n,gain:0,run:true,paused:false,L,
+  hm:1+(L-1)*.06,sm:1+Math.min((L-1)*.004,1.2)};
+ show('game');G.run=true;fit();
+ last=performance.now();requestAnimationFrame(loop);
+}
+function nextL(){S.lvl=Math.min(S.lvl+1,300);save();startGame()}
+
+function spawn(){
+ const L=G.L,av=L>=4?3:L>=2?2:1,i=Math.floor(Math.random()*av);
+ const hp=E[i].hp*G.hm;
+ G.es.push({x:W+10,r:Math.floor(Math.random()*5),hp,mx:hp,i});
+}
+function end(w){
+ G.run=false;
+ let g=G.gain;
+ if(w){g+=20+G.L*5;S.max=Math.max(S.max,Math.min(G.L+1,300))}
+ S.coins+=g;save();
+ $('rt').textContent=t(w?'win':'lose');
+ $('rg').textContent=t('gain')+': '+Math.floor(g)+' 🪙';
+ $('nx').style.display=(w&&G.L<300)?'':'none';
+ beep(w?800:120,.4);
+ show('res');
+}
+function upd(dt){
+ const L=G.L;
+ G.en+=(4+S.up.en*1.5)*(S.cell=='animal'?1.6:1)*(S.pro?1.5:1)*dt;
+ G.sp-=dt;
+ if(G.left>0&&G.sp<=0){G.sp=Math.max(.5,2-L*.01);G.left--;spawn()}
+ for(const e of G.es){
+  const d=E[e.i];
+  if(e.x>C0+10)e.x-=d.sp*G.sm*dt;
+  else G.wh-=d.d*(1+L*.03)*dt;
+ }
+ for(const r of G.ts){
+  r.cd-=dt;
+  if(r.cd<=0&&G.es.some(e=>e.r==r.r&&e.x>r.x)){
+   r.cd=1.2/(1+.12*S.up.cyto);
+   G.bs.push({x:r.x+14,r:r.r,t:r.t});
+  }
+ }
+ for(const b of G.bs){
+  b.x+=330*dt;
+  const e=G.es.find(e=>e.r==b.r&&Math.abs(e.x-b.x)<14);
+  if(e){
+   e.hp-=TW[b.t].dmg*(1+.15*S.up.wpn)*(E[e.i].tool==b.t?2.5:.5)*(S.pro?1.2:1);
+   b.x=9999;beep(300+b.t*150,.05);
+  }
+ }
+ G.bs=G.bs.filter(b=>b.x<W+20);
+ G.gain+=G.es.filter(e=>e.hp<=0).length*(2+(L>>3));
+ G.es=G.es.filter(e=>e.hp>0);
+ if(G.wh<=0)return end(false);
+ if(G.left<=0&&!G.es.length)end(true);
+}
+function draw(){
+ cx.fillStyle='#021a0a';cx.fillRect(0,0,W,H);
+ for(let r=0;r<5;r++)for(let c=0;c<10;c++){
+  cx.fillStyle=(r+c)%2?'#04260f':'#03200c';
+  cx.fillRect(C0+c*CW,r*RH,CW,RH);
+ }
+ const pl=S.cell=='plant';
+ cx.globalAlpha=.3+.7*Math.max(0,G.wh/G.wm);
+ cx.fillStyle=pl?'#2fa52f':'#e69ab0';
+ cx.fillRect(0,0,pl?C0:C0-22,H);
+ cx.strokeStyle=pl?'#8f8':'#fcd';cx.lineWidth=pl?6:3;
+ cx.strokeRect(pl?3:1,1,pl?C0-6:C0-24,H-2);
+ cx.globalAlpha=1;
+ cx.textAlign='center';cx.font='24px serif';
+ for(const r of G.ts){
+  cx.fillStyle='#0008';cx.beginPath();cx.arc(r.x,r.y,22,0,7);cx.fill();
+  cx.strokeStyle=TW[r.t].c;cx.lineWidth=2;cx.stroke();
+  cx.fillText(TW[r.t].ic,r.x,r.y+8);
+ }
+ for(const e of G.es){
+  const y=e.r*RH+RH/2;
+  cx.fillStyle=cx.strokeStyle=E[e.i].c;cx.lineWidth=2;
+  cx.beginPath();
+  if(e.i==0){
+   cx.arc(e.x,y,13,0,7);cx.fill();
+   for(let a=0;a<8;a++){cx.moveTo(e.x,y);cx.lineTo(e.x+Math.cos(a*.785)*20,y+Math.sin(a*.785)*20)}
+   cx.stroke();
+  }else if(e.i==1){cx.ellipse(e.x,y,19,10,0,0,7);cx.fill()}
+  else{
+   cx.arc(e.x,y,17,0,7);cx.fill();
+   cx.arc(e.x-8,y-14,6,0,7);cx.arc(e.x+9,y+14,6,0,7);cx.fill();
+  }
+  cx.fillStyle='#f00';cx.fillRect(e.x-16,y-26,32,3);
+  cx.fillStyle='#0f0';cx.fillRect(e.x-16,y-26,32*e.hp/e.mx,3);
+ }
+ for(const b of G.bs){
+  cx.fillStyle=TW[b.t].c;cx.beginPath();cx.arc(b.x,b.r*RH+RH/2,4,0,7);cx.fill();
+ }
+ if(G.paused){cx.fillStyle='#0f0';cx.font='30px sans-serif';cx.fillText('II',W/2,H/2)}
+}
+function hud(){
+ $('hc').textContent=Math.floor(S.coins+G.gain);
+ $('he').textContent=Math.floor(G.en);
+ $('hw').textContent=Math.max(0,Math.ceil(100*G.wh/G.wm))+'%';
+ $('hl').textContent=G.L;
+}
+function loop(now){
+ if(!G||!G.run)return;
+ const dt=Math.min((now-last)/1000,.05);last=now;
+ if(!G.paused)upd(dt);
+ if(!G.run)return;
+ draw();hud();
+ requestAnimationFrame(loop);
+}
+cv.addEventListener('pointerdown',ev=>{
+ if(!G||!G.run||G.paused)return;
+ const r=cv.getBoundingClientRect();
+ const x=(ev.clientX-r.left)*W/r.width,y=(ev.clientY-r.top)*H/r.height;
+ const c=Math.floor((x-C0)/CW),row=Math.floor(y/RH);
+ if(c<0||c>9||row<0||row>4)return;
+ if(G.ts.some(o=>o.c==c&&o.r==row))return;
+ const k=TW[G.sel];
+ if(G.en<k.cost){beep(150,.2);return}
+ G.en-=k.cost;
+ G.ts.push({x:C0+c*CW+CW/2,y:row*RH+RH/2,c,r:row,t:G.sel,cd:0});
+ beep(500,.08);
+});
+refresh();
+</script></body></html>
