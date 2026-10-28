@@ -5,40 +5,40 @@
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 input{user-select:text;-webkit-user-select:text}
-html,body{margin:0;height:100%;background:#18242a;color:#e3ede7;font-family:Tahoma,Arial,sans-serif;overflow:hidden}
-.scr{position:fixed;inset:0;background:linear-gradient(135deg,#1d2c33,#243a3a);display:none;z-index:5;overflow:auto;padding:10px;text-align:center}
+html,body{margin:0;height:100%;background:#12232a;color:#e6f0ea;font-family:Tahoma,Arial,sans-serif;overflow:hidden}
+.scr{position:fixed;inset:0;background:linear-gradient(135deg,#17303a,#1f3f43);display:none;z-index:5;overflow:auto;padding:10px;text-align:center}
 .scr.on{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
 .scr.top.on{justify-content:flex-start}
 h1{margin:0}
-h2{margin:0;font-size:20px;color:#bfe3d0}
-.b{background:#35585a;color:#e3ede7;border:1px solid #6fa396;border-radius:10px;padding:8px 16px;font-size:15px;margin:2px;font-family:inherit}
-.b:active{background:#4a7a74}
+h2{margin:0;font-size:20px;color:#c4e6d6}
+.b{background:#3a6462;color:#e6f0ea;border:1px solid #79b1a2;border-radius:10px;padding:8px 16px;font-size:15px;margin:2px;font-family:inherit}
+.b:active{background:#4f8a82}
 .b:disabled{opacity:.4}
-.tx{background:#16242a;color:#e3ede7;border:1px solid #6fa396;border-radius:10px;padding:8px;font-size:15px;width:160px;text-align:center}
-#splash{background:#0f1a1e}
-#splash h1{font-size:34px;color:#e0463f;letter-spacing:3px;text-shadow:0 0 12px #e0463f66}
-#splash p{margin:0;color:#e0463f;letter-spacing:6px;font-size:15px}
+.tx{background:#13222a;color:#e6f0ea;border:1px solid #79b1a2;border-radius:10px;padding:8px;font-size:15px;width:160px;text-align:center}
+#splash{background:#0d171b}
+#splash h1{font-size:36px;color:#e0463f;letter-spacing:3px;text-shadow:0 0 14px #e0463f55}
+#splash p{margin:0;color:#e0463f;letter-spacing:7px;font-size:15px}
 #menu.on{flex-direction:row;direction:ltr;justify-content:space-around}
 #mside{display:flex;flex-direction:column;gap:8px}
-.sq{width:78px;height:78px;border-radius:14px;background:#2c4448;border:2px solid #5f8f84;color:#e3ede7;font-size:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:inherit}
+.sq{width:80px;height:80px;border-radius:14px;background:#2f4f53;border:2px solid #6aa093;color:#e6f0ea;font-size:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:inherit}
 .sq i{font-size:26px;font-style:normal}
-.sq:active{background:#3b6460}
+.sq:active{background:#41706b}
 #mmid{line-height:1.8}
-.card{display:flex;align-items:center;gap:10px;background:#2a4146;border:1px solid #4f7a70;border-radius:12px;padding:8px 12px;margin:3px auto;font-size:13px;width:94%;max-width:560px;text-align:start}
+.card{display:flex;align-items:center;gap:10px;background:#2c474d;border:1px solid #547f75;border-radius:12px;padding:8px 12px;margin:3px auto;font-size:13px;width:94%;max-width:560px;text-align:start}
 #pk{display:flex;gap:12px;direction:ltr}
-.cc{background:#2a4146;border:2px solid #5f8f84;border-radius:14px;padding:8px;width:210px;color:#e3ede7;font-family:inherit;font-size:12px;line-height:1.7}
-.cc:active{background:#3b6460}
-#game{position:fixed;inset:0;display:none;flex-direction:row;direction:ltr;background:#18242a}
+.cc{background:#2c474d;border:2px solid #6aa093;border-radius:14px;padding:8px;width:210px;color:#e6f0ea;font-family:inherit;font-size:12px;line-height:1.7}
+.cc:active{background:#41706b}
+#game{position:fixed;inset:0;display:none;flex-direction:row;direction:ltr;background:#12232a}
 #mn{flex:1;display:flex;flex-direction:column;min-width:0}
-#top{height:32px;display:flex;align-items:center;gap:10px;padding:0 8px;font-size:13px;background:#1f3238;white-space:nowrap}
-.bat{display:inline-block;width:36px;height:15px;border:2px solid #cfe3d8;border-radius:4px;position:relative;vertical-align:middle}
+#top{height:32px;display:flex;align-items:center;gap:9px;padding:0 8px;font-size:13px;background:#1b343b;white-space:nowrap;overflow:hidden}
+.bat{display:inline-block;width:36px;height:15px;border:2px solid #d3e6dc;border-radius:4px;position:relative;vertical-align:middle}
 .bat b{position:absolute;left:0;top:0;bottom:0;width:100%}
-.mini{background:#35585a;color:#e3ede7;border:1px solid #6fa396;border-radius:6px;font-size:13px;padding:1px 8px}
+.mini{background:#3a6462;color:#e6f0ea;border:1px solid #79b1a2;border-radius:6px;font-size:13px;padding:1px 8px}
 #cw{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
 #cv{touch-action:none}
-#side{width:88px;padding:4px;display:flex;flex-direction:column;gap:5px;background:#1f3238;justify-content:center}
-.tl{flex:1;max-height:100px;background:#2c4448;border:2px solid #4f7a70;border-radius:12px;color:#e3ede7;font-size:11px;font-family:inherit;line-height:1.5}
-.tl.sel{border-color:#a5e6c6;background:#3d6a64}
+#side{width:86px;padding:4px;display:flex;flex-direction:column;gap:4px;background:#1b343b;justify-content:center}
+.tl{flex:1;max-height:84px;background:#2f4f53;border:2px solid #547f75;border-radius:12px;color:#e6f0ea;font-size:10px;font-family:inherit;line-height:1.4;padding:2px}
+.tl.sel{border-color:#b2ecd0;background:#437873}
 </style></head><body>
 
 <div class="scr on" id="splash"><canvas id="lg" width="120" height="80"></canvas><h1>MICROBE WAR</h1><p>BIO DEFENSE</p></div>
@@ -48,7 +48,7 @@ h2{margin:0;font-size:20px;color:#bfe3d0}
 <button class="sq" onclick="show('pick')"><i>▶</i><span data-t="play"></span></button>
 <button class="sq" onclick="show('shop')"><i>🛒</i><span data-t="shop"></span></button>
 <button class="sq" onclick="show('set')"><i>⚙️</i><span data-t="settings"></span></button></div>
-<div id="mmid"><h2>MICROBE WAR</h2><div style="color:#9cc9b6">BIO DEFENSE</div>
+<div id="mmid"><h2>MICROBE WAR</h2><div style="color:#9fcfba">BIO DEFENSE</div>
 <div style="margin-top:14px"><span data-t="level"></span> <b id="lv"></b></div>
 <div>🪙 <b id="mc"></b> <b id="pb"></b></div></div></div>
 
@@ -56,7 +56,7 @@ h2{margin:0;font-size:20px;color:#bfe3d0}
 <button class="b" onclick="show('menu')" data-t="back"></button></div>
 
 <div class="scr top" id="set"><h2 data-t="settings"></h2>
-<div><span data-t="sound"></span> <input type="range" id="vol" min="0" max="1" step="0.1" style="width:140px" oninput="S.vol=+this.value;save();beep(500,.1)"></div>
+<div><span data-t="sound"></span> <input type="range" id="vol" min="0" max="1" step="0.1" style="width:140px" oninput="state.vol=+this.value;save();beep(500,.1)"></div>
 <div><span data-t="lang"></span> <button class="b" onclick="setLang('ar')">عربي</button><button class="b" onclick="setLang('en')">English</button></div>
 <div><button class="b" onclick="show('book')" data-t="book"></button></div>
 <h2 data-t="codes"></h2>
@@ -74,143 +74,133 @@ h2{margin:0;font-size:20px;color:#bfe3d0}
 <div><button class="b" id="nx" onclick="show('pick')" data-t="next"></button><button class="b" id="rr" onclick="show('pick')" data-t="retry"></button><button class="b" onclick="show('menu')" data-t="menu"></button></div></div>
 
 <div id="game"><div id="mn">
-<div id="top"><span class="bat"><b id="bf"></b></span><b id="hw"></b><span>🪙 <b id="hc"></b></span><span>⚡ <b id="he"></b></span><span><span data-t="level"></span> <b id="hl"></b></span><span>🦠 <b id="hn"></b></span>
+<div id="top"><span class="bat"><b id="bf"></b></span><b id="hw"></b><span>🛡️<b id="hs"></b></span><span>🪙<b id="hc"></b></span><span>⚡<b id="he"></b></span><span><span data-t="level"></span> <b id="hl"></b></span><span>🦠<b id="hn"></b></span>
 <button class="mini" onclick="G.paused=!G.paused">⏸</button><button class="mini" onclick="show('menu')">✖</button></div>
-<div id="cw"><canvas id="cv" width="800" height="350"></canvas></div></div>
+<div id="cw"><canvas id="cv" width="900" height="420"></canvas></div></div>
 <div id="side">
-<button class="tl" id="tb0" onclick="sel(0)"></button><button class="tl" id="tb1" onclick="sel(1)"></button><button class="tl" id="tb2" onclick="sel(2)"></button></div></div>
+<button class="tl" id="tb0" onclick="sel(0)"></button><button class="tl" id="tb1" onclick="sel(1)"></button><button class="tl" id="tb2" onclick="sel(2)"></button><button class="tl" id="tb3" onclick="sel(3)"></button></div></div>
 
 <script>
-const T={
+'use strict';
+const TXT={
 ar:{play:"العب",shop:"المتجر",settings:"الإعدادات",book:"📖 كتاب الميكروبات (Book History)",back:"رجوع",sound:"الصوت",lang:"اللغة",codes:"🎁 استبدال الأكواد",choose:"اختر خليتك",
 animal:"الخلية الحيوانية",plant:"الخلية النباتية",
-animalP:"⚡ طاقة أسرع 60%\n🔫 إطلاق أسرع 20%\n🛡️ جدار عادي",
-plantP:"🛡️ جدار خلوي قوي ×2.5\n🌿 الجدار يتجدد ببطء\n⚡ طاقة عادية",
+animalP:"⚡ طاقة أسرع<br>🔫 إطلاق أسرع 20%<br>🛡️ جدار عادي",
+plantP:"🛡️ جدار خلوي قوي ×2.5<br>🌿 الجدار يتجدد<br>⚡ طاقة عادية",
 level:"المستوى",up_wall:"الجدار الخلوي",up_cyto:"قوة السيتوبلازم",up_en:"إنتاج الطاقة",up_wpn:"الأسلحة والمضادات",
 code:"اكتب الكود",apply:"تفعيل",bad:"كود غير صحيح",used:"الكود مستخدم من قبل",pro:"تم فتح حساب PRO!",
-win:"انتصار!",lose:"خسرت!",next:"التالي",retry:"إعادة",menu:"القائمة",weak:"نقطة الضعف",gain:"الكوينز المكتسبة",
-t0:"مضاد حيوي",t1:"مضاد فيروسات",t2:"مضاد فطريات",
-n0:"فيروس الإنفلونزا",d0:"كرة صغيرة بنتوءات، سريعة وضعيفة. تتكاثر داخل الخلايا.",
-n1:"فيروس العاقمة",d1:"رأس سداسي وأرجل، يهاجم البكتيريا وهو سريع جداً.",
-n2:"بكتيريا كروية",d2:"خلايا مستديرة تتجمع كالعناقيد، متوسطة القوة.",
-n3:"بكتيريا عصوية",d3:"جسم طويل وسوط للحركة، قوية وبطيئة نسبياً.",
-n4:"الفطر",d4:"بطيء وصلب بجدار من الكيتين وصحته كبيرة."},
+win:"انتصار!",lose:"النواة سقطت!",next:"التالي",retry:"إعادة",menu:"القائمة",weak:"نقطة الضعف",gain:"الكوينز المكتسبة",
+t0:"ميتوكوندريا",t1:"مضاد حيوي",t2:"مضاد فيروسات",t3:"مضاد فطريات",
+n0:"فيروس الإنفلونزا",d0:"كرة صغيرة بنتوءات، سريعة وضعيفة.",
+n1:"فيروس العاقمة",d1:"رأس سداسي وأرجل، سريع جداً.",
+n2:"بكتيريا كروية",d2:"خلايا مستديرة متجمعة، متوسطة القوة.",
+n3:"بكتيريا عصوية",d3:"جسم طويل وسوط، قوية وبطيئة.",
+n4:"الفطر",d4:"بطيء وصلب وصحته كبيرة."},
 en:{play:"Play",shop:"Shop",settings:"Settings",book:"📖 Book History",back:"Back",sound:"Sound",lang:"Language",codes:"🎁 Redeem Codes",choose:"Choose your cell",
 animal:"Animal Cell",plant:"Plant Cell",
-animalP:"⚡ 60% faster energy\n🔫 20% faster fire\n🛡️ Normal wall",
-plantP:"🛡️ Strong cell wall x2.5\n🌿 Wall slowly regenerates\n⚡ Normal energy",
+animalP:"⚡ Faster energy<br>🔫 20% faster fire<br>🛡️ Normal wall",
+plantP:"🛡️ Strong cell wall x2.5<br>🌿 Wall regenerates<br>⚡ Normal energy",
 level:"Level",up_wall:"Cell Wall",up_cyto:"Cytoplasm Power",up_en:"Energy Production",up_wpn:"Weapons & Antibiotics",
 code:"Enter code",apply:"Apply",bad:"Invalid code",used:"Code already used",pro:"PRO Account Unlocked!",
-win:"Victory!",lose:"Defeat!",next:"Next",retry:"Retry",menu:"Menu",weak:"Weakness",gain:"Coins earned",
-t0:"Antibiotic",t1:"Antiviral",t2:"Antifungal",
-n0:"Flu Virus",d0:"Small spiky ball, fast and weak. Multiplies inside cells.",
-n1:"Bacteriophage",d1:"Hexagon head with legs. Attacks bacteria, very fast.",
-n2:"Coccus Bacteria",d2:"Round cells in clusters, medium strength.",
-n3:"Bacillus Bacteria",d3:"Long body with a flagellum, strong and fairly slow.",
-n4:"Fungus",d4:"Slow and tough with a chitin wall and lots of health."}};
-const S={coins:0,lvl:1,cell:'animal',up:{wall:0,cyto:0,en:0,wpn:0},pro:false,used:[],vol:.5,lang:'ar'};const $=id=>document.getElementById(id);
-const t=k=>T[S.lang][k]||k;
-try{Object.assign(S,JSON.parse(localStorage.getItem('mw2')||'{}'))}catch(e){}
-function save(){try{localStorage.setItem('mw2',JSON.stringify(S))}catch(e){}}
-let ac;
-function beep(f,d){if(!S.vol)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.value=S.vol*.12;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+win:"Victory!",lose:"The nucleus fell!",next:"Next",retry:"Retry",menu:"Menu",weak:"Weakness",gain:"Coins earned",
+t0:"Mitochondria",t1:"Antibiotic",t2:"Antiviral",t3:"Antifungal",
+n0:"Flu Virus",d0:"Small spiky ball, fast and weak.",
+n1:"Bacteriophage",d1:"Hexagon head with legs, very fast.",
+n2:"Coccus Bacteria",d2:"Round clustered cells, medium strength.",
+n3:"Bacillus Bacteria",d3:"Long body with a flagellum, strong and slow.",
+n4:"Fungus",d4:"Slow and tough with lots of health."}};
+const SAVE_KEY='mw3';
+const state={coins:0,lvl:1,cell:'animal',up:{wall:0,cyto:0,en:0,wpn:0},pro:false,used:[],vol:.5,lang:'ar'};
+const ENEMIES=[
+{hp:30,sp:40,dmg:5,col:'#ee8fa8',weak:2,unlock:1},
+{hp:45,sp:55,dmg:6,col:'#b8a0e6',weak:2,unlock:4},
+{hp:70,sp:28,dmg:8,col:'#e8b866',weak:1,unlock:2},
+{hp:100,sp:24,dmg:11,col:'#ec9a68',weak:1,unlock:8},
+{hp:160,sp:14,dmg:15,col:'#74bddc',weak:3,unlock:14}];
+const TOOLS=[
+{cost:50,col:'#f0c36a',ic:'⚡',dmg:0},
+{cost:75,col:'#8fd19e',ic:'💊',dmg:10},
+{cost:100,col:'#7fd0e0',ic:'💉',dmg:10},
+{cost:125,col:'#e6d37a',ic:'🧪',dmg:14}];const $=id=>document.getElementById(id);
+const t=k=>TXT[state.lang][k]||k;
+try{Object.assign(state,JSON.parse(localStorage.getItem(SAVE_KEY)||'{}'))}catch(e){}
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch(e){}}
+let audioCtx;
+function beep(f,d){
+ if(!state.vol)return;
+ try{audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();
+ const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+ o.frequency.value=f;g.gain.value=state.vol*.12;
+ o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d)}catch(e){}
+}
 
-const E=[{hp:30,sp:40,d:5,c:'#e8809e',tool:1},{hp:45,sp:55,d:6,c:'#b69ae0',tool:1},{hp:70,sp:28,d:8,c:'#e5b45f',tool:0},{hp:100,sp:24,d:11,c:'#e8935e',tool:0},{hp:160,sp:14,d:15,c:'#6fb7d9',tool:2}];
-const UNL=[1,4,2,8,14];
-const TW=[{cost:50,c:'#8fd19e',dmg:10,ic:'💊'},{cost:75,c:'#7fd0e0',dmg:10,ic:'💉'},{cost:100,c:'#e6d37a',dmg:14,ic:'🧪'}];
+const W=900,H=420,CX=450,CY=210,TAU=Math.PI*2;
 
-function drawEnemy(c,i,x,y,s,col){
- c.save();c.translate(x,y);c.scale(s,s);
- c.fillStyle=c.strokeStyle=col||E[i].c;c.lineWidth=2;c.lineCap='round';
+function rr(c,x,y,w,h,r){
+ c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);
+ c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();
+}
+function edgeVal(pl,dx,dy){return pl?Math.max(Math.abs(dx)/185,Math.abs(dy)/165):Math.hypot(dx/195,dy/170)}
+
+function drawEnemy(c,i,x,y,s,col,ang,tm){
+ c.save();c.translate(x,y);c.rotate(ang||0);
+ const k=s*(1+.05*Math.sin((tm||0)*6+i));c.scale(k,k);
+ c.fillStyle=c.strokeStyle=col||ENEMIES[i].col;c.lineWidth=2.4;c.lineCap='round';
  if(i==0){
-  c.beginPath();c.arc(0,0,12,0,7);c.fill();
+  c.beginPath();c.arc(0,0,12,0,TAU);c.fill();
   for(let a=0;a<10;a++){const q=a*.628,x1=Math.cos(q),y1=Math.sin(q);
    c.beginPath();c.moveTo(x1*12,y1*12);c.lineTo(x1*19,y1*19);c.stroke();
-   c.beginPath();c.arc(x1*20,y1*20,2.5,0,7);c.fill()}
+   c.beginPath();c.arc(x1*20,y1*20,2.6,0,TAU);c.fill()}
  }else if(i==1){
   c.beginPath();for(let a=0;a<6;a++){const q=a*1.047;c.lineTo(8+Math.cos(q)*11,Math.sin(q)*11)}c.closePath();c.fill();
-  c.beginPath();c.moveTo(-3,0);c.lineTo(-15,0);c.stroke();
-  c.fillRect(-4,-5,3,10);
-  for(const d of [-9,0,9]){c.beginPath();c.moveTo(-15,0);c.lineTo(-24,d);c.stroke()}
+  c.beginPath();c.moveTo(-3,0);c.lineTo(-14,0);c.stroke();
+  c.fillRect(-14,-5,3,10);
+  for(const d of [-9,0,9]){c.beginPath();c.moveTo(-14,0);c.lineTo(-24,d);c.stroke()}
  }else if(i==2){
-  for(const p of [[-7,-5],[5,-7],[0,3],[-10,6],[10,4]]){c.beginPath();c.arc(p[0],p[1],7,0,7);c.fill()}
+  for(const p of [[-7,-5],[5,-7],[0,3],[-10,6],[10,4]]){c.beginPath();c.arc(p[0],p[1],7,0,TAU);c.fill()}
  }else if(i==3){
-  c.beginPath();c.ellipse(4,0,17,8,0,0,7);c.fill();
+  c.beginPath();c.ellipse(4,0,17,8,0,0,TAU);c.fill();
   c.beginPath();c.moveTo(-13,0);c.quadraticCurveTo(-19,-8,-24,0);c.quadraticCurveTo(-29,8,-34,0);c.stroke();
  }else{
-  c.beginPath();c.arc(0,0,12,0,7);c.fill();
+  c.beginPath();c.arc(0,0,12,0,TAU);c.fill();
   for(let a=0;a<6;a++){const q=a*1.047+.3,r=22+(a%2)*5,x1=Math.cos(q),y1=Math.sin(q);
    c.beginPath();c.moveTo(x1*10,y1*10);c.lineTo(x1*r,y1*r);c.stroke();
-   c.beginPath();c.arc(x1*r,y1*r,5,0,7);c.fill()}
+   c.beginPath();c.arc(x1*r,y1*r,5,0,TAU);c.fill()}
  }
+ c.fillStyle='#ffffff55';c.beginPath();c.arc(-2,-4,4,0,TAU);c.fill();
+ c.fillStyle='#2a1a2a';c.beginPath();c.arc(6,-4,2,0,TAU);c.arc(6,4,2,0,TAU);c.fill();
  c.restore();
 }
-function drawCell(c,p,x,y){
- c.save();c.translate(x,y);
- if(p){
-  c.fillStyle='#a8d48f';c.strokeStyle='#4f9a52';c.lineWidth=7;
-  c.fillRect(-46,-32,92,64);c.strokeRect(-46,-32,92,64);
-  c.fillStyle='#8fcbdc';c.beginPath();c.ellipse(-12,4,22,16,0,0,7);c.fill();
-  c.fillStyle='#5aa860';for(const q of [[28,-14],[30,16],[-32,-16],[-4,-20]]){c.beginPath();c.ellipse(q[0],q[1],7,4,0,0,7);c.fill()}
-  c.fillStyle='#b9708f';c.beginPath();c.arc(30,2,7,0,7);c.fill();
+
+const ORG=[[-120,-60,10],[110,-70,12],[-100,75,9],[125,60,11],[0,-112,8],[-20,118,10],[75,98,7],[-145,5,8],[145,0,9]];
+function drawNucleus(c,tm,hr){
+ c.save();
+ const g=c.createRadialGradient(-10,-10,5,0,0,46);g.addColorStop(0,'#c9a2e0');g.addColorStop(1,'#7f5bab');
+ const p=1+.03*Math.sin(tm*3);
+ c.scale(p,p);
+ c.beginPath();c.arc(0,0,44,0,TAU);c.fillStyle=g;c.fill();
+ c.lineWidth=5;c.strokeStyle=hr>.4?'#e4cdf2':'#e0675f';c.stroke();
+ c.fillStyle='#4f3375';c.beginPath();c.arc(-6,-4,15,0,TAU);c.fill();
+ c.fillStyle='#ffffff44';c.beginPath();c.arc(-12,-10,5,0,TAU);c.fill();
+ c.restore();
+}
+function drawBody(c,pl,tm,wr,hr){
+ c.save();
+ if(pl){
+  rr(c,-185,-165,370,330,40);c.fillStyle='#aad8aa';c.fill();
+  c.globalAlpha=.35+.65*wr;c.lineWidth=14;c.strokeStyle='#4f9a62';c.stroke();c.globalAlpha=1;
+  c.lineWidth=3;c.strokeStyle='#d6f0d6';rr(c,-177,-157,354,314,34);c.stroke();
+  c.fillStyle='#9ad4e099';c.beginPath();c.ellipse(-95,70,48,64,.4,0,TAU);c.fill();
+  c.fillStyle='#58a85c';
+  for(const o of ORG){c.beginPath();c.ellipse(o[0],o[1],o[2]+6,o[2]-1,o[0]*.02,0,TAU);c.fill()}
  }else{
-  c.fillStyle='#efc1cf';c.strokeStyle='#f6dbe4';c.lineWidth=3;
-  c.beginPath();c.ellipse(0,0,50,36,0,0,7);c.fill();c.stroke();
-  c.fillStyle='#b9708f';c.beginPath();c.arc(-6,-2,14,0,7);c.fill();
-  c.fillStyle='#8c4a6e';c.beginPath();c.arc(-6,-2,5,0,7);c.fill();
-  c.fillStyle='#e6a36a';for(const q of [[26,-10],[22,14],[-32,10],[-28,-16]]){c.beginPath();c.ellipse(q[0],q[1],7,4,0,0,7);c.fill()}
+  c.beginPath();c.ellipse(0,0,195,170,0,0,TAU);c.fillStyle='#ebc6d3';c.fill();
+  c.globalAlpha=.35+.65*wr;c.lineWidth=7;c.strokeStyle='#f8dfe9';c.stroke();c.globalAlpha=1;
+  c.fillStyle='#e8a76f';
+  for(const o of ORG){c.beginPath();c.ellipse(o[0],o[1],o[2]+7,o[2]-2,o[1]*.02,0,TAU);c.fill()}
+  c.strokeStyle='#d99ab0';c.lineWidth=4;c.lineCap='round';
+  for(let k=0;k<3;k++){c.beginPath();c.moveTo(70,-60+k*9);c.quadraticCurveTo(100,-70+k*9,130,-60+k*9);c.stroke()}
  }
+ drawNucleus(c,tm,hr);
  c.restore();
-}
-
-function show(id){
- document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id==id));
- $('game').style.display=id=='game'?'flex':'none';
- if(id!='game'&&G)G.run=false;
- refresh();
-}
-function setLang(l){S.lang=l;save();refresh()}
-function cost(k){return Math.round(100*Math.pow(S.up[k]+1,1.6))}
-function buy(k){
- if(S.up[k]>=20||S.coins<cost(k)){beep(150,.2);return}
- S.coins-=cost(k);S.up[k]++;save();beep(700,.1);refresh();
-}
-function promo(){
- const c=$('cd').value.trim().toUpperCase();
- let m;
- if(!['MARWAN_PRO','REV_VIP'].includes(c))m=t('bad');
- else if(S.used.includes(c))m=t('used');
- else{S.used.push(c);S.coins+=50000;S.pro=true;save();m=t('pro')+' +50,000 🪙';beep(900,.3)}
- refresh();$('pm').textContent=m;
-}
-function sel(i){if(G)G.sel=i;for(let j=0;j<3;j++)$('tb'+j).classList.toggle('sel',j==(G?G.sel:0))}
-
-function refresh(){
- document.documentElement.lang=S.lang;
- document.documentElement.dir=S.lang=='ar'?'rtl':'ltr';
- document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
- document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=t(e.dataset.ph));
- $('lv').textContent=S.lvl+' / 300';
- $('pl').textContent=S.lvl;
- $('mc').textContent=Math.floor(S.coins);
- $('sc').textContent=Math.floor(S.coins);
- $('pb').textContent=S.pro?'⭐ PRO':'';
- $('vol').value=S.vol;
- for(let i=0;i<3;i++)$('tb'+i).innerHTML=TW[i].ic+'<br>'+t('t'+i)+'<br>'+TW[i].cost+'⚡';
- sel(G?G.sel:0);
- let u='';
- for(const k of ['wall','cyto','en','wpn']){
-  const n=S.up[k];
-  u+='<div><button class="b" '+(n>=20?'disabled':'')+' onclick="buy(\''+k+'\')">'+t('up_'+k)+' ['+n+'/20] — '+(n>=20?'MAX':cost(k)+' 🪙')+'</button></div>';
- }
- $('ups').innerHTML=u;
- let b='';
- for(let i=0;i<5;i++){
-  const w=TW[E[i].tool];
-  b+='<div class="card"><canvas width="90" height="64"></canvas><div><b>'+t('n'+i)+'</b><br>'+t('d'+i)+'<br>'+t('weak')+': <b style="color:'+w.c+'">'+w.ic+' '+t('t'+E[i].tool)+'</b></div></div>';
- }
- $('bk').innerHTML=b;
- $('bk').querySelectorAll('canvas').forEach((cn,i)=>drawEnemy(cn.getContext('2d'),i,48,32,1));
- $('pk').innerHTML=['animal','plant'].map(k=>'<button class="cc" onclick="begin(\''+k+'\')"><canvas width="120" height="90"></canvas><br><b>'+t(k)+'</b><br>'+t(k+'P').replace(/\n/g,'<br>')+'</button>').join('');
- $('pk').querySelectorAll('canvas').forEach((cn,i)=>drawCell(cn.getContext('2d'),i,60,45));
  }
